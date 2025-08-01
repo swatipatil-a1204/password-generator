@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Password Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+    }
+    .container {
+      max-width: 400px;
+      margin: auto;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Password Generator</h2>
+
+    <label>
+      Length:
+      <input type="number" id="length" value="12" min="4" max="100" />
+    </label>
+
+    <label><input type="checkbox" id="uppercase" checked /> Include Uppercase</label>
+    <label><input type="checkbox" id="lowercase" checked /> Include Lowercase</label>
+    <label><input type="checkbox" id="numbers" checked /> Include Numbers</label>
+    <label><input type="checkbox" id="symbols" /> Include Symbols</label>
+
+    <button id="generateBtn">Generate Password</button>
+
+    <input type="text" id="output" readonly />
+  </div>
+
+  <script>
+    const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lower = "abcdefghijklmnopqrstuvwxyz";
+    const nums = "0123456789";
+    const syms = "!@#$%^&*()_+-=[]{}|;:,.<>?";
+
+    const generateBtn = document.getElementById("generateBtn");
+
+    generateBtn.addEventListener("click", () => {
+      const length = parseInt(document.getElementById("length").value);
+      const useUpper = document.getElementById("uppercase").checked;
+      const useLower = document.getElementById("lowercase").checked;
+      const useNums = document.getElementById("numbers").checked;
+      const useSyms = document.getElementById("symbols").checked;
+
+      let charPool = "";
+      let mandatoryChars = "";
+
+      if (useUpper) {
+        charPool += upper;
+        mandatoryChars += randomChar(upper);
+      }
+      if (useLower) {
+        charPool += lower;
+        mandatoryChars += randomChar(lower);
+      }
+      if (useNums) {
+        charPool += nums;
+        mandatoryChars += randomChar(nums);
+      }
+      if (useSyms) {
+        charPool += syms;
+        mandatoryChars += randomChar(syms);
+      }
+
+      if (!charPool) {
+        alert("Please select at least one character type.");
+        return;
+      }
+
+      let password = mandatoryChars;
+
+      for (let i = password.length; i < length; i++) {
+        password += randomChar(charPool);
+      }
+
+      document.getElementById("output").value = shuffle(password);
+    });
+
+    function randomChar(str) {
+      return str[Math.floor(Math.random() * str.length)];
+    }
+
+    function shuffle(str) {
+      return [...str].sort(() => Math.random() - 0.5).join('');
+    }
+  </script>
+</body>
+</html>
